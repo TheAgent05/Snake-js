@@ -1,6 +1,7 @@
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 const points = document.querySelector('.points');
+let gameTimeout;
 
 const gameState = {
 dx : 20,
@@ -12,7 +13,7 @@ speed : 150,
 pause : false,
 snake: [{x: 40, y: 200}, {x: 20, y: 200}, {x: 0, y: 200}],
 food: [{x: 200, y: 200}],
-barriersCount : 50,
+barriersCount : 10,
 barriers : []
 };
 
@@ -44,7 +45,10 @@ function foodEaten() {
     do {
         newX = Math.floor(Math.random() * (canvas.width / 20)) * 20;
         newY = Math.floor(Math.random() * (canvas.height / 20)) * 20;
-    } while (gameState.snake.some(segment => segment.x === newX && segment.y === newY));
+    } while (
+        gameState.snake.some(segment => segment.x === newX && segment.y === newY) &&
+        gameState.barriers.some(b => b.x === newX && b.y === newY)
+    );
     
     gameState.food[0].x = newX;
     gameState.food[0].y = newY;
@@ -61,7 +65,7 @@ function generateBarriers(count = gameState.barriersCount) {
             newY = Math.floor(Math.random() * (canvas.height / 20)) * 20;
         } while (
             gameState.snake.some(segment => segment.x === newX && segment.y == newY) &&
-            gameState.food[0].x === newX && food[0].y === newY &&
+            (gameState.food[0].x === newX && gameState.food[0].y === newY) &&
             barriers.some(segment => segment.x === newX && segment.y === newY)
         );
         barriers.push({x : newX, y : newY})
@@ -91,6 +95,7 @@ document.addEventListener('keydown', e => {
     }
     if (e.key === ' ') {
         gameState.pause = !gameState.pause;
+        document.querySelector('.page-wrapper').classList.toggle('blur');
     }
     
 });
@@ -138,11 +143,42 @@ function isGameOver() {
     );
 }
 
+document.querySelector('.reset').addEventListener('click', () => {
+    clearTimeout(gameTimeout);
+
+    Object.assign(gameState, {
+        dx: 20,
+        dy: 0,
+        nextDx: 20,
+        nextDy: 0,
+        scores: 0,
+        speed: 150,
+        pause: false,
+        snake: [{x: 40, y: 200}, {x: 20, y: 200}, {x: 0, y: 200}],
+        food: [{x: 200, y: 200}],
+        barriers: generateBarriers()
+    });
+    gameLoop();
+});
+
+
 document.querySelector('.play').addEventListener('click', () => {
-    document.querySelector('.main-screen').classList.toggle('none');
-    document.querySelector('.text').classList.toggle('none');
-    document.querySelector('.game-container').classList.toggle('none');
-    gameLoop()
+    document.querySelector('.main-screen').classList.toggle('opacity');
+    document.querySelector('.play').disabled = true;
+    setTimeout(() => {document.querySelector('.main-screen').classList.toggle('none'); }, 1500);
+    setTimeout(() => {
+        document.querySelector('.text').classList.toggle('none');
+        document.querySelector('.game-container').classList.toggle('none');
+        document.querySelector('.reset-game').classList.toggle('none');
+
+        setTimeout(() => {
+            document.querySelector('.text').style.opacity = 1;
+            document.querySelector('.game-container').style.opacity = 1;
+            document.querySelector('.reset-game').style.opacity = 1;
+        }, 50);
+    
+        gameLoop();
+    }, 2000);
 })
 
 

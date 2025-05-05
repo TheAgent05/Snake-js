@@ -69,7 +69,7 @@ function foodEaten() {
         spawnTime: Date.now()
     };
 
-    gameState.speed = Math.max(50, gameState.speed - 2);
+    gameState.speed = Math.max(80, gameState.speed - 2);
 }
 
 function generateBarriers(count = gameState.barriersCount) {
@@ -197,8 +197,10 @@ document.querySelector('.play').addEventListener('click', () => {
             document.querySelector('.game-container').style.opacity = 1;
             document.querySelector('.reset-game').style.opacity = 1;
         }, 50);
-    
-        gameLoop();
+        drawSnake();
+        drawBarrier();
+        foodGenerate();
+        setTimeout(() => {gameLoop();},1500);
     }, 2000);
 })
 

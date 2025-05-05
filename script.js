@@ -1,6 +1,7 @@
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 const points = document.querySelector('.points');
+const record = document.querySelector('.record');
 let gameTimeout;
 
 const gameState = {
@@ -14,7 +15,8 @@ pause : false,
 snake: [{x: 40, y: 200}, {x: 20, y: 200}, {x: 0, y: 200}],
 food: [{x: 200, y: 200, spawnTime: Date.now()}],
 barriersCount : 10,
-barriers : []
+barriers : [],
+highScore : JSON.parse(localStorage.getItem("record")) || 0
 };
 
 const gameSounds = {
@@ -73,6 +75,11 @@ function foodEaten() {
         spawnTime: Date.now()
     };
 
+    if (gameState.scores > gameState.highScore) {
+        gameState.highScore = gameState.scores;
+        record.innerHTML = gameState.highScore;
+        localStorage.setItem("record", JSON.stringify(gameState.highScore));
+    }
     gameState.speed = Math.max(80, gameState.speed - 2);
 }
 
@@ -138,13 +145,13 @@ function moveSnake() {
 }
 
 
+
 function gameLoop() {
     if(isGameOver()) {
         gameSounds.death.play();
         alert("Game Over!");
         return;
     }
-    
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     if(!gameState.pause)
     moveSnake();
@@ -155,6 +162,10 @@ function gameLoop() {
 }
 
 function isGameOver() {
+    if (gameState.scores > gameState.highScore) {
+    localStorage.setItem("record", JSON.stringify(gameState.scores));
+    }
+
     const head = gameState.snake[0];
     return (
         head.x < 0 || 
@@ -167,6 +178,7 @@ function isGameOver() {
 
 document.querySelector('.reset').addEventListener('click', () => {
     clearTimeout(gameTimeout);
+    points.innerHTML = 0;
 
     Object.assign(gameState, {
         dx: 20,
@@ -187,17 +199,19 @@ document.querySelector('.reset').addEventListener('click', () => {
 document.querySelector('.play').addEventListener('click', () => {
     gameSounds.start.play();
 
+    record.textContent = gameState.highScore;
+
 
     document.querySelector('.main-screen').classList.toggle('opacity');
     document.querySelector('.play').disabled = true;
     setTimeout(() => {document.querySelector('.main-screen').classList.toggle('none'); }, 1500);
     setTimeout(() => {
-        document.querySelector('.text').classList.toggle('none');
+        document.querySelector('.text-wrapper').classList.toggle('none');
         document.querySelector('.game-container').classList.toggle('none');
         document.querySelector('.reset-game').classList.toggle('none');
 
         setTimeout(() => {
-            document.querySelector('.text').style.opacity = 1;
+            document.querySelector('.text-wrapper').style.opacity = 1;
             document.querySelector('.game-container').style.opacity = 1;
             document.querySelector('.reset-game').style.opacity = 1;
         }, 50);

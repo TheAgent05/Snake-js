@@ -23,6 +23,10 @@ death : new Audio('source/sounds/death.mp3'),
 food : new Audio('source/sounds/food.mp3')
 };
 
+gameSounds.start.volume = 0.15;
+gameSounds.death.volume = 0.15;
+gameSounds.food.volume = 0.15;
+
 gameState.barriers = generateBarriers();
 
 function drawBarrier () {

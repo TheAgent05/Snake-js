@@ -12,9 +12,15 @@ scores : 0,
 speed : 150,
 pause : false,
 snake: [{x: 40, y: 200}, {x: 20, y: 200}, {x: 0, y: 200}],
-food: [{x: 200, y: 200}],
+food: [{x: 200, y: 200, spawnTime: Date.now()}],
 barriersCount : 10,
 barriers : []
+};
+
+const gameSounds = {
+start : new Audio('source/sounds/start.mp3'),
+death : new Audio('source/sounds/death.mp3'),
+food : new Audio('source/sounds/food.mp3')
 };
 
 gameState.barriers = generateBarriers();
@@ -27,33 +33,43 @@ function drawBarrier () {
 }
 
 function drawSnake() {
-    ctx.fillStyle = "green"; 
+    ctx.fillStyle = "#6bbb37"; 
     gameState.snake.forEach(segment => {
         ctx.fillRect(segment.x, segment.y, 20, 20);
     });
+    ctx.fillStyle = "#67b335"; 
+    ctx.fillRect(gameState.snake[0].x, gameState.snake[0].y, 20, 20);
 }
 
 function foodGenerate() {
-    ctx.fillStyle = "red";
-    gameState.food.forEach(segment => {
-        ctx.fillRect(segment.x, segment.y, 20, 20);
-    });
-}
+    const food = gameState.food[0];
+    const animationDuration = 300;
+    const elapsed = Date.now() - food.spawnTime;
+    const progress = Math.min(elapsed / animationDuration, 1);
 
+    const size = 20 * progress;
+    const offset = (20 - size) / 2;
+
+    ctx.fillStyle = "red";
+    ctx.fillRect(food.x + offset, food.y + offset, size, size);
+}
 function foodEaten() {
     let newX, newY;
     do {
         newX = Math.floor(Math.random() * (canvas.width / 20)) * 20;
         newY = Math.floor(Math.random() * (canvas.height / 20)) * 20;
     } while (
-        gameState.snake.some(segment => segment.x === newX && segment.y === newY) &&
+        gameState.snake.some(segment => segment.x === newX && segment.y === newY) ||
         gameState.barriers.some(b => b.x === newX && b.y === newY)
     );
     
-    gameState.food[0].x = newX;
-    gameState.food[0].y = newY;
+    gameState.food[0] = {
+        x: newX,
+        y: newY,
+        spawnTime: Date.now()
+    };
 
-    gameState.speed -= 2
+    gameState.speed = Math.max(50, gameState.speed - 2);
 }
 
 function generateBarriers(count = gameState.barriersCount) {
@@ -64,8 +80,8 @@ function generateBarriers(count = gameState.barriersCount) {
             newX = Math.floor(Math.random() * (canvas.width / 20)) * 20;
             newY = Math.floor(Math.random() * (canvas.height / 20)) * 20;
         } while (
-            gameState.snake.some(segment => segment.x === newX && segment.y == newY) &&
-            (gameState.food[0].x === newX && gameState.food[0].y === newY) &&
+            gameState.snake.some(segment => segment.x === newX && segment.y == newY) ||
+            (gameState.food[0].x === newX && gameState.food[0].y === newY) ||
             barriers.some(segment => segment.x === newX && segment.y === newY)
         );
         barriers.push({x : newX, y : newY})
@@ -110,6 +126,7 @@ function moveSnake() {
     if (!(head.x === gameState.food[0].x && head.y === gameState.food[0].y)) {
         gameState.snake.pop();
     } else {
+        gameSounds.food.play();
         gameState.scores += 1;
         points.innerHTML = gameState.scores;
         foodEaten()
@@ -119,6 +136,7 @@ function moveSnake() {
 
 function gameLoop() {
     if(isGameOver()) {
+        gameSounds.death.play();
         alert("Game Over!");
         return;
     }
@@ -155,7 +173,7 @@ document.querySelector('.reset').addEventListener('click', () => {
         speed: 150,
         pause: false,
         snake: [{x: 40, y: 200}, {x: 20, y: 200}, {x: 0, y: 200}],
-        food: [{x: 200, y: 200}],
+        food: [{x: 200, y: 200, spawnTime: Date.now()}],
         barriers: generateBarriers()
     });
     gameLoop();
@@ -163,6 +181,9 @@ document.querySelector('.reset').addEventListener('click', () => {
 
 
 document.querySelector('.play').addEventListener('click', () => {
+    gameSounds.start.play();
+
+
     document.querySelector('.main-screen').classList.toggle('opacity');
     document.querySelector('.play').disabled = true;
     setTimeout(() => {document.querySelector('.main-screen').classList.toggle('none'); }, 1500);

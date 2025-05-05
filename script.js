@@ -197,29 +197,50 @@ document.querySelector('.reset').addEventListener('click', () => {
 
 
 document.querySelector('.play').addEventListener('click', () => {
+    // Запускаем звук старта
     gameSounds.start.play();
 
+    // Обновляем отображение рекорда
     record.textContent = gameState.highScore;
 
+    // Анимация исчезновения стартового экрана
+    const mainScreen = document.querySelector('.main-screen');
+    const playButton = document.querySelector('.play');
+    mainScreen.classList.toggle('opacity');
+    playButton.disabled = true;
 
-    document.querySelector('.main-screen').classList.toggle('opacity');
-    document.querySelector('.play').disabled = true;
-    setTimeout(() => {document.querySelector('.main-screen').classList.toggle('none'); }, 1500);
+    // Через 1.5 секунды скрываем главный экран
     setTimeout(() => {
-        document.querySelector('.text-wrapper').classList.toggle('none');
-        document.querySelector('.game-container').classList.toggle('none');
-        document.querySelector('.reset-game').classList.toggle('none');
+        mainScreen.classList.toggle('none');
+    }, 1500);
 
+    // Через 2 секунды показываем саму игру и текст
+    setTimeout(() => {
+        const textWrapper = document.querySelector('.text-wrapper');
+        const gameContainer = document.querySelector('.game-container');
+        const resetGame = document.querySelector('.reset-game');
+
+        textWrapper.classList.toggle('none');
+        gameContainer.classList.toggle('none');
+        resetGame.classList.toggle('none');
+
+        // Плавное появление элементов
         setTimeout(() => {
-            document.querySelector('.text-wrapper').style.opacity = 1;
-            document.querySelector('.game-container').style.opacity = 1;
-            document.querySelector('.reset-game').style.opacity = 1;
+            textWrapper.style.opacity = 1;
+            gameContainer.style.opacity = 1;
+            resetGame.style.opacity = 1;
         }, 50);
+
+        // Отрисовываем стартовое состояние
         drawSnake();
         drawBarrier();
         foodGenerate();
-        setTimeout(() => {gameLoop();},1500);
+
+        // Запускаем игру через 1.5 секунды
+        setTimeout(() => {
+            gameLoop();
+        }, 1500);
     }, 2000);
-})
+});
 
 

@@ -228,7 +228,6 @@ document.querySelector('.play').addEventListener('click', () => {
         drawSnake();
         drawBarrier();
         foodGenerate();
-
         setTimeout(() => {
             gameLoop();
         }, 1500);

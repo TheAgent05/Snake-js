@@ -9,6 +9,28 @@
     font-family: 'Poppins', sans-serif;
 }
 
+::placeholder {
+    text-align: center; 
+ }
+ 
+ /* or, for legacy browsers */
+ 
+ ::-webkit-input-placeholder {
+    text-align: center;
+ }
+ 
+ :-moz-placeholder { /* Firefox 18- */
+    text-align: center;  
+ }
+ 
+ ::-moz-placeholder {  /* Firefox 19+ */
+    text-align: center;  
+ }
+ 
+ :-ms-input-placeholder {  
+    text-align: center; 
+ }
+
 li,
 ul {
     list-style: none;
@@ -140,6 +162,33 @@ canvas {
 .play:hover {
     color: white;
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+}
+
+.input-barriers {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    flex-grow: 1;
+}
+
+.input-barriers input {
+    outline: none;
+    border: 2px solid #333;
+    font-size: 1em;
+    width: 100%;
+    margin-top: 10px;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    /* display: none; <- Crashes Chrome on hover */
+    -webkit-appearance: none;
+    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}
+
+input[type=number] {
+    -moz-appearance : textfield;
 }
 
 .reset-game {

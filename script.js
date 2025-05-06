@@ -2,6 +2,7 @@ const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 const points = document.querySelector('.points');
 const record = document.querySelector('.record');
+const barrierInput = document.querySelector('#barriers-counter');
 let gameTimeout;
 
 const gameState = {
@@ -29,7 +30,13 @@ gameSounds.start.volume = 0.15;
 gameSounds.death.volume = 0.15;
 gameSounds.food.volume = 0.15;
 
-gameState.barriers = generateBarriers();
+barrierInput.addEventListener('input', function() {
+    if (barrierInput.valueAsNumber > barrierInput.max) {
+        barrierInput.valueAsNumber = barrierInput.max;
+    } else if (barrierInput.valueAsNumber < barrierInput.min) {
+        barrierInput.valueAsNumber = barrierInput.min;
+    }
+  });
 
 function drawBarrier () {
     ctx.fillStyle = "#333"; 
@@ -167,12 +174,15 @@ function isGameOver() {
     }
 
     const head = gameState.snake[0];
+    const selfCollision = gameState.snake.slice(1).some(segment => segment.x === head.x && segment.y === head.y);
+
     return (
         head.x < 0 || 
         head.y < 0 || 
         head.x >= canvas.width || 
         head.y >= canvas.height ||
-        gameState.barriers.some(barrier => head.x === barrier.x && head.y === barrier.y)
+        gameState.barriers.some(barrier => head.x === barrier.x && head.y === barrier.y) ||
+        selfCollision
     );
 }
 
@@ -197,7 +207,9 @@ document.querySelector('.reset').addEventListener('click', () => {
 
 
 document.querySelector('.play').addEventListener('click', () => {
-    gameSounds.start.play();
+    gameSounds.start.play();  
+    gameState.barriersCount = barrierInput.valueAsNumber;
+    gameState.barriers = generateBarriers();
 
     record.textContent = gameState.highScore;
 

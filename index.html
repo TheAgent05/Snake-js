@@ -7,34 +7,42 @@
     <link rel="stylesheet" href="source/styles/style.css">
     <title>Jnake</title>
 </head>
-<body>
+<body class="">
 
     <div class="page-wrapper">
-        <div class="main-screen">
-            <h1>Snake</h1>
-            <button class="play">Play!</button>
+        <div class="main-screen windows">
+            <h1 class="h1">Snake</h1>
+            <button class="play buttons ">Play!</button>
             <div class="input-barriers">
-                <input type="number" name="numberBarriers" id="barriers-counter" placeholder="barriers" min="0" max="50">
+                <input type="number" name="numberBarriers" id="barriers-counter" placeholder="barriers" min="0" max="50" class="b-input">
             </div>
         </div>
         <div class="text-wrapper none opacity">
-            <div class="high-score-text">
-                <h1>Record</h1>
+            <div class="high-score-text windows">
+                <h1 class="h1">Record</h1>
                 <h1 class="record">0</h1>
             </div>
-            <div class="text">
-                <h1>Scores</h1>
+            <div class="text windows">
+                <h1 class="h1">Scores</h1>
                 <h1 class="points">0</h1>
             </div>
         </div>
         <div class="game-container none opacity">
-            <canvas id="gameCanvas" width="400px" height="400px"></canvas>
+            <canvas id="gameCanvas" width="400px" height="400px" class="windows"></canvas>
         </div>
         <div class="reset-game none opacity">
-            <button class="reset">Reset</button>
+            <button class="reset buttons">Reset</button>
+        </div>
+    </div>
+
+    <div class="theme-container">
+        <div class="theme-button">
+            <ion-icon name="contrast-outline" class="theme-icon h1"></ion-icon>
         </div>
     </div>
 
     <script src="script.js"></script>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 </body>
 </html>

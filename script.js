@@ -126,6 +126,9 @@ document.addEventListener('keydown', e => {
         gameState.nextDx = 0;
         gameState.nextDy = -20;
     }
+    if (e.key === "r") {
+        resetGame();
+    }
     }
     if (e.key === ' ') {
         gameState.pause = !gameState.pause;
@@ -186,7 +189,7 @@ function isGameOver() {
     );
 }
 
-document.querySelector('.reset').addEventListener('click', () => {
+function resetGame() {
     clearTimeout(gameTimeout);
     points.innerHTML = 0;
 
@@ -202,8 +205,11 @@ document.querySelector('.reset').addEventListener('click', () => {
         food: [{x: 200, y: 200, spawnTime: Date.now()}],
         barriers: generateBarriers()
     });
+
     gameLoop();
-});
+}
+
+document.querySelector('.reset').addEventListener('click', resetGame);
 
 
 document.querySelector('.play').addEventListener('click', () => {
@@ -247,3 +253,25 @@ document.querySelector('.play').addEventListener('click', () => {
 });
 
 
+// Theme switcher
+document.querySelector('.theme-icon').addEventListener('click', () => {
+    const body = document.querySelector('body');
+    const input = document.querySelector('.b-input');
+    const windows = document.querySelectorAll('.windows');
+    const buttons = document.querySelectorAll('.buttons');
+    const h1s = document.querySelectorAll('.h1');
+
+    body.classList.toggle('dark-background');
+    input.classList.toggle('dark-input');
+    windows.forEach(window => {
+        window.classList.toggle('dark-window');
+    });
+
+    buttons.forEach(button => {
+        button.classList.toggle('dark-button');
+    });
+
+    h1s.forEach(h1 => {
+        h1.classList.toggle('dark-text');
+    });
+});

@@ -63,6 +63,7 @@ canvas {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    height: 100%;
 }
 
 .blur {
@@ -211,6 +212,7 @@ input[type=number] {
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
     transition: color 1.5s;
     z-index: 1;
+    user-select: none;
 }
 .reset::after {
     content: "";
@@ -240,4 +242,56 @@ input[type=number] {
 
 .opacity {
     opacity: 0;
+}
+
+
+
+
+
+
+
+/* --------------------------------------------------- */
+
+
+
+.theme-container {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-start;
+}
+
+.theme-icon {
+    font-size: 2em;
+    color: #333;
+    user-select: none;
+    cursor: pointer;
+}
+
+body, .b-input, .dark-window, .buttons, .h1 {
+    transition: background-color 0.7s ease, color 0.4s ease;
+  }
+
+.dark-background {
+    background-color: #333;
+}
+
+.dark-window {
+    border: 2px solid #222;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+}
+
+.dark-button {
+    border: 2px solid #111;
+    background-color: #f0f0f0;
+}
+
+.dark-input {
+    border: 2px solid #222;
+    background-color: #f0f0f0;
+}
+
+.dark-text {
+    color: #f0f0f0;
 }

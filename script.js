@@ -201,25 +201,38 @@ document.querySelector('.play').addEventListener('click', () => {
 
     record.textContent = gameState.highScore;
 
+    const mainScreen = document.querySelector('.main-screen');
+    const playButton = document.querySelector('.play');
+    mainScreen.classList.toggle('opacity');
+    playButton.disabled = true;
 
-    document.querySelector('.main-screen').classList.toggle('opacity');
-    document.querySelector('.play').disabled = true;
-    setTimeout(() => {document.querySelector('.main-screen').classList.toggle('none'); }, 1500);
     setTimeout(() => {
-        document.querySelector('.text-wrapper').classList.toggle('none');
-        document.querySelector('.game-container').classList.toggle('none');
-        document.querySelector('.reset-game').classList.toggle('none');
+        mainScreen.classList.toggle('none');
+    }, 1500);
+
+    setTimeout(() => {
+        const textWrapper = document.querySelector('.text-wrapper');
+        const gameContainer = document.querySelector('.game-container');
+        const resetGame = document.querySelector('.reset-game');
+
+        textWrapper.classList.toggle('none');
+        gameContainer.classList.toggle('none');
+        resetGame.classList.toggle('none');
 
         setTimeout(() => {
-            document.querySelector('.text-wrapper').style.opacity = 1;
-            document.querySelector('.game-container').style.opacity = 1;
-            document.querySelector('.reset-game').style.opacity = 1;
+            textWrapper.style.opacity = 1;
+            gameContainer.style.opacity = 1;
+            resetGame.style.opacity = 1;
         }, 50);
+
         drawSnake();
         drawBarrier();
         foodGenerate();
-        setTimeout(() => {gameLoop();},1500);
+
+        setTimeout(() => {
+            gameLoop();
+        }, 1500);
     }, 2000);
-})
+});
 
 

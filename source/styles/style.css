@@ -63,7 +63,6 @@ canvas {
     border-radius: 5px;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
     margin: 15px 0;
-    opacity: 1;
     padding: 10px 15px;
 }
 
@@ -114,6 +113,7 @@ canvas {
     overflow: hidden;
     background-color: #f3f3f3;
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.06);
+    border: 2px solid #333;
     font-size: 1.2rem;
     margin-top: 0.3em;
     transition: background-color ease-in-out 0.3ms, color 1.5s;
